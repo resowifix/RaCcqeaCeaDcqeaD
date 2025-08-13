@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm -rf data
+mkdir data
+echo -e "id;nom;prenom;est_X;numero_tel;mail;solde" > data/pax.csv
+echo -e "date;montant" > data/bouffes.csv
+echo -e "id;nom;prenom" > data/presence.csv
