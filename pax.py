@@ -8,6 +8,7 @@ class Pax:
     est_X = True
 
     def __init__(self, id, nom, prenom, est_X=True, numero_tel="", mail="", solde=0):
+        self.id = id
         self.nom = nom
         self.prenom = prenom
         self.est_X = True
@@ -46,7 +47,7 @@ class Croyant:
             self.membres.append(parse_pax(ligne))
         file_pax.close()
 
-    def add_new_user(self, pax):
+    def add_pax(self, pax):
         self.membres.append(pax)
 
     def delete_pax(self, heretique):
@@ -58,6 +59,7 @@ class Croyant:
 
     def save(self):
         file_pax = open("data/pax.csv", "w")
+        file_pax.write("id;nom;prenom;est_X;numero_tel;mail;solde\n")  
         for pax in self.membres:
             file_pax.write(file_line_of_pax(pax))
         file_pax.close()

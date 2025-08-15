@@ -26,10 +26,13 @@ class CCX:
                         self.presence[idx][i] = presenc_bouffes[i]
 
     def save(self):
-        NotImplemented
+        self.pax.save()
+        self.bouffes.save()
 
     def add_bouffe(self, date, montant, participants):
         NotImplemented
 
-    def add_pax(self, nom, prenom, est_X, numero_tel, mail):
-        NotImplemented
+    def add_pax(self, id, nom, prenom, est_X, numero_tel, mail):
+        converti = lib_pax.Pax(id, nom, prenom, est_X, numero_tel, mail)
+        self.pax.add_pax(converti)
+

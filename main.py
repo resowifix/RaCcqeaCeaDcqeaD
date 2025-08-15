@@ -1,19 +1,21 @@
 from ccx import CCX
+from dogmes import Dogmes
 import pax as p
 import os
 
 
 def main():
     ccx = CCX()
+    dogmes = Dogmes()
     stop = False
     print("Tagazok à toi, mon frère !")
     while not stop:
-        stop = ask_user(ccx)
+        stop = ask_user(ccx, dogmes)
         if stop:
-            stop = stop_app(ccx)
+            stop = stop_app(ccx, dogmes)
 
 
-def ask_user(ccx):
+def ask_user(ccx, dogmes):
     print("Qu'est ce que tu me veux, wesh ??!!? ", end="")
     message = input()
     action, args = parse_message(message)
@@ -24,13 +26,13 @@ def ask_user(ccx):
             display_help()
             return False
         case "save":
-            ccx.save()
+            save(ccx, dogmes)
             return False
         case "aj_pax":
-            add_pax(ccx, args)
+            add_pax(ccx, dogmes, args)
             return False
         case "aj_bouffe":
-            add_bouffe(ccx, args)
+            add_bouffe(ccx, dogmes, args)
             return False
         case "del_pax":
             del_pax(ccx, args)
@@ -61,7 +63,7 @@ def display_help():
     print("T'es pas bien malin !")
 
 
-def add_pax(ccx, args):
+def add_pax(ccx, dogmes, args):
     print("Nom ? ", end="")
     nom = input()
     if not nom:
@@ -76,10 +78,12 @@ def add_pax(ccx, args):
     numero_tel = input()
     print("Mail ? ", end="")
     mail = input()
-    ccx.add_pax(nom, prenom, est_X, numero_tel, mail)
+    id = int(dogmes.kt("id_pax"))
+    dogmes.concile("id_pax", str(id+1))
+    ccx.add_pax(id, nom, prenom, est_X, numero_tel, mail)
 
 
-def add_bouffe(ccx, args):
+def add_bouffe(ccx, dogmes, args):
     print("Date ? (aaaammjj) ", end="")
     date = input()
     if not date.isdigit() or len(date) != 8:
@@ -126,14 +130,18 @@ def reinitialize(ccx):
         os.system("./initialisation")
         ccx.__init__()
 
+def save(ccx, dogmes):
+    ccx.save()
+    dogmes.save()
 
-def stop_app(ccx):
+
+def stop_app(ccx, dogmes):
     print("Sûr (O/n) ?")
     if input() == "n":
         return False
     print("Sauver avant de quitter (O/n) ?")
     if input() != "n":
-        ccx.save()
+        save(ccs, dogmes)
     print("Deo gracias !")
     return True
 
