@@ -65,7 +65,12 @@ def display_help():
 
 def add_pax(ccx, dogmes, args):
     nom, prenom, est_X, numero_tel, mail = ask_info_pax()
-    create_new_pax(ccx, dogmes, nom, prenom, est_X, numero_tel, mail)
+    if check_info_pax(nom, prenom, est_X, numero_tel, mail):
+        create_new_pax(ccx, dogmes, nom, prenom, est_X != False, numero_tel, mail)
+
+
+def check_info_pax(nom, prenom, est_X, numero_tel, mail):
+    return True
 
 
 def ask_info_pax():

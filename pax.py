@@ -11,7 +11,7 @@ class Pax:
         self.id = id
         self.nom = nom
         self.prenom = prenom
-        self.est_X = True
+        self.est_X = est_X
         self.numero_tel = numero_tel
         self.mail = mail
         self.solde = solde
@@ -174,7 +174,9 @@ def parse_pax(ligne: str) -> Pax:
     )
 
 
-def bool_of_string_est_X(est_X: str) -> bool:
+def bool_of_string_est_X(est_X: str) -> str | bool:
+    if est_X == "":
+        return ""
     return not est_X == "0"
 
 
