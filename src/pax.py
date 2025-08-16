@@ -55,9 +55,10 @@ class Croyant:
     def add_pax(self, pax: Pax) -> None:
         self.membres.append(pax)
 
-    def delete_pax(self, heretique: Pax) -> int:
-        for i in range(self.membres):
-            if heretique == self.pax[i]:
+        
+    def delete_pax(self, heretique):
+        for i in range(len(self.membres)):
+            if heretique == self.membres[i]:
                 self.membres.pop(i)
                 return 0
         return 1

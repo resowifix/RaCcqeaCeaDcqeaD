@@ -2,3 +2,5 @@
 __pycache__
 data
 pyproject.toml
+.venv
+.ropeproject
