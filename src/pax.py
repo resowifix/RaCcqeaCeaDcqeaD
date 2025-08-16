@@ -55,15 +55,15 @@ class Croyant:
         self.membres.append(pax)
 
     def delete_pax(self, heretique):
-        for i in range(self.membres):
-            if heretique == self.pax[i]:
+        for i in range(len(self.membres)):
+            if heretique == self.membres[i]:
                 self.membres.pop(i)
                 return 0
         return 1
 
     def save(self):
         file_pax = open(self.filename, "w")
-        file_pax.write("id;nom;prenom;est_X;numero_tel;mail;solde\n")  
+        file_pax.write("id;nom;prenom;est_X;numero_tel;mail;solde\n")
         for pax in self.membres:
             file_pax.write(file_line_of_pax(pax))
         file_pax.close()
