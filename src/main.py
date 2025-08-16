@@ -93,23 +93,69 @@ def create_new_pax(ccx, dogmes, nom, prenom, est_X, numero_tel, mail):
     ccx.add_pax(id, nom, prenom, est_X, numero_tel, mail)
 
 
-def add_bouffe(ccx, dogmes, args):
+def add_bouffe(ccx: CCX, dogmes: Dogmes, args: list[str]) -> None:
+    date, montant, participants = ask_info_bouffe()
+    create_new_bouffe(ccx, dogmes, date, montant, participants)
+
+
+def ask_info_bouffe() -> tuple[str, str, list[str]]:
     print("Date ? (aaaammjj) ", end="")
     date = input()
-    if not date.isdigit() or len(date) != 8:
-        return
     print("Montant ? ", end="")
-    montant = int(input())
-    if not montant:
-        return
+    montant = input()
     print("Pax ? (prenom.nom)")
     pax = input()
     participants = []
     while pax:
         print("Suivant")
-        participants.append(pax.split("."))
+        participants.append(pax)
         pax = input()
-    ccx.add_bouffe(date, montant, participants)
+    return date, montant, participants
+
+
+def check_bouffe(date: str, montant: str, catholiques: list[int]) -> bool:
+    if len(date) != 8:
+        return
+    if not montant.isdigit():
+        return
+    if len(catholiques) == 0:
+        return
+    return True
+
+
+def check_participants(ccx: CCX, participants: list[str]) -> tuple[list[int], list[str], list[str]]:
+    catholiques = []
+    athes = []
+    protestants = []
+
+    for infos in participants:
+        if "." in infos:
+            prenom, nom = infos.split(".")
+            ouvriers = ccx.find_pax([nom, prenom], ["nom", "prenom"])
+            match len(ouvriers):
+                case 0:
+                    athes.append(infos)
+                case 1:
+                    catholiques.append(ouvriers[0].id)
+                case _:
+                    protestants.append(infos)
+        else:
+            athes.append(infos)
+    return catholiques, athes, protestants
+
+
+def list_infideles(athes: list[str], protestants: list[str]) -> None:
+    for nom in athes + protestants:
+        print(f"Cette personne n'a pu être ajoutée à la bouffe: {nom}")
+
+
+def create_new_bouffe(ccx: CCX, dogmes: Dogmes, date: str, montant: str, participants: list[int]) -> None:
+    id = int(dogmes.kt("id_bouffe"))
+    dogmes.concile("id_bouffe", str(id + 1))
+    catholiques, athes, protestants = check_participants(ccx, participants)
+    list_infideles(athes, protestants)
+    if check_bouffe(date, montant, catholiques):
+        ccx.add_bouffe(id, date, int(montant), catholiques)
 
 
 def del_pax(ccx, args):
