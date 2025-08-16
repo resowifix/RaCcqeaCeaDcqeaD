@@ -11,7 +11,7 @@ class Pax:
         self.id = id
         self.nom = nom
         self.prenom = prenom
-        self.est_X = True
+        self.est_X = est_X
         self.numero_tel = numero_tel
         self.mail = mail
         self.solde = solde
@@ -63,7 +63,7 @@ class Croyant:
 
     def save(self):
         file_pax = open(self.filename, "w")
-        file_pax.write("id;nom;prenom;est_X;numero_tel;mail;solde\n")  
+        file_pax.write("id;nom;prenom;est_X;numero_tel;mail;solde\n")
         for pax in self.membres:
             file_pax.write(file_line_of_pax(pax))
         file_pax.close()
@@ -78,11 +78,18 @@ class Croyant:
         return self.membres[index]
 
     def find_pax(self, clees, critere_clees):
+        clees, critere_clees = self.clean_find_clees(clees, critere_clees)
+        return self.find_pax_plusieurs_criteres(clees, critere_clees)
+
+    def clean_find_clees(self, clees, critere_clees):
         try:
             clees[0]
-            return self.find_pax_plusieurs_criteres(clees, critere_clees)
+            return (
+                [clee for clee in clees if clee != ""],
+                [critere_clees[i] for i in range(len(critere_clees)) if clees[i] != ""],
+            )
         except:
-            return self.find_pax_1_critere(clees, critere_clees)
+            return [clees], [critere_clees]
 
     def find_pax_plusieurs_criteres(self, clees, critere_clees):
         listes_trouves = []
@@ -93,15 +100,17 @@ class Croyant:
     def find_pax_1_critere(self, clee, critere):
         match critere:
             case "id":
-                return self.find_pax_id(id)
+                return self.find_pax_id(clee)
             case "nom":
-                return self.find_pax_nom(id)
+                return self.find_pax_nom(clee)
             case "prenom":
-                return self.find_pax_prenom(id)
+                return self.find_pax_prenom(clee)
+            case "est_X":
+                return self.find_pax_est_X(clee)
             case "numero_tel":
-                return self.find_pax_numero_tel(id)
+                return self.find_pax_numero_tel(clee)
             case "mail":
-                return self.find_pax_mail(id)
+                return self.find_pax_mail(clee)
 
     def find_pax_id(self, id):
         for i in range(len(self.membres)):
@@ -119,6 +128,13 @@ class Croyant:
         trouves = []
         for i in range(len(self.membres)):
             if self.membres[i].prenom == prenom:
+                trouves.append(i)
+        return trouves
+
+    def find_pax_est_X(self, est_X):
+        trouves = []
+        for i in range(len(self.membres)):
+            if self.membres[i].est_X == est_X:
                 trouves.append(i)
         return trouves
 
@@ -146,11 +162,11 @@ class Croyant:
                     break
             if verifie_autres_criteres:
                 trouves.append(idx_pax)
-        return trouves
+        return [self.membres[i] for i in trouves]
 
 
 def parse_pax(ligne: str) -> Pax:
-    id, nom, prenom, est_X, numero_tel, mail, solde = ligne.split(ligne, ";")
+    id, nom, prenom, est_X, numero_tel, mail, solde = ligne.split(";")
     return Pax(
         int(id),
         nom,
@@ -162,7 +178,9 @@ def parse_pax(ligne: str) -> Pax:
     )
 
 
-def bool_of_string_est_X(est_X: str) -> bool:
+def bool_of_string_est_X(est_X: str) -> str | bool:
+    if est_X == "":
+        return ""
     return not est_X == "0"
 
 

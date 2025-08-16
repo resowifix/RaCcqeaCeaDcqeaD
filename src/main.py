@@ -64,22 +64,32 @@ def display_help():
 
 
 def add_pax(ccx, dogmes, args):
+    nom, prenom, est_X, numero_tel, mail = ask_info_pax()
+    if check_info_pax(nom, prenom, est_X, numero_tel, mail):
+        create_new_pax(ccx, dogmes, nom, prenom, est_X != False, numero_tel, mail)
+
+
+def check_info_pax(nom, prenom, est_X, numero_tel, mail):
+    return True
+
+
+def ask_info_pax():
     print("Nom ? ", end="")
     nom = input()
-    if not nom:
-        return
     print("Prenom ? ", end="")
     prenom = input()
-    if not prenom:
-        return
     print("C'est un X ? (0 pour non)", end="")
     est_X = p.bool_of_string_est_X(input())
     print("Numero de téléphone ? ", end="")
     numero_tel = input()
     print("Mail ? ", end="")
     mail = input()
+    return nom, prenom, est_X, numero_tel, mail
+
+
+def create_new_pax(ccx, dogmes, nom, prenom, est_X, numero_tel, mail):
     id = int(dogmes.kt("id_pax"))
-    dogmes.concile("id_pax", str(id+1))
+    dogmes.concile("id_pax", str(id + 1))
     ccx.add_pax(id, nom, prenom, est_X, numero_tel, mail)
 
 
@@ -111,7 +121,30 @@ def del_bouffe(ccx, args):
 
 
 def find_pax(ccx, args):
-    NotImplemented
+    nom, prenom, est_X, numero_tel, mail = ask_info_pax()
+    find_pax_with_info(ccx, nom, prenom, est_X, numero_tel, mail)
+
+
+def find_pax_with_info(ccx, nom, prenom, est_X, numero_tel, mail):
+    print_find_results(
+        ccx.find_pax(
+            [nom, prenom, est_X, numero_tel, mail],
+            ["nom", "prenom", "est_X", "numero_tel", "mail"],
+        )
+    )
+
+
+def print_find_results(results):
+    match len(results):
+        case 0:
+            print("On est dans le désert depuis 40 jours, y'a plus grand monde :(")
+        case 1:
+            print("Voici l'élu :")
+            print(results[0])
+        case _:
+            print("Va falloir plus que 5 pains et 2 poissons")
+            for result in results:
+                print(result)
 
 
 def find_bouffe(ccx, args):
@@ -130,6 +163,7 @@ def reinitialize(ccx):
         os.system("./initialisation")
         ccx.__init__()
 
+
 def save(ccx, dogmes):
     ccx.save()
     dogmes.save()
@@ -141,7 +175,7 @@ def stop_app(ccx, dogmes):
         return False
     print("Sauver avant de quitter (O/n) ?")
     if input() != "n":
-        save(ccs, dogmes)
+        save(ccx, dogmes)
     print("Deo gracias !")
     return True
 
