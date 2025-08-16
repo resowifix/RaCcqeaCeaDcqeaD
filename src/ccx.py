@@ -4,11 +4,13 @@ import utilitaire as util
 
 
 class CCX:
-    bouffes = lib_bouffe.Ensemble_bouffes()
-    pax = lib_pax.Croyant()
+    bouffes: lib_bouffe.Ensemble_bouffes
+    pax: lib_pax.Croyant
     presence: list[list[bool]]
 
     def __init__(self):
+        self.bouffes = lib_bouffe.Ensemble_bouffes()
+        self.pax = lib_pax.Croyant()
         self.bouffes.import_from_database()
         self.pax.import_from_database()
         self.presence = [[42] * len(self.bouffes) for i in range(len(self.pax))]
@@ -32,9 +34,15 @@ class CCX:
     def add_bouffe(self, date, montant, participants):
         NotImplemented
 
-    def add_pax(self, id, nom, prenom, est_X, numero_tel, mail):
+    def add_pax(
+        self, id: int, nom: str, prenom: str, est_X: bool, numero_tel: str, mail: str
+    ) -> None:
         converti = lib_pax.Pax(id, nom, prenom, est_X, numero_tel, mail)
         self.pax.add_pax(converti)
 
-    def find_pax(self, clees, critere_clees):
+    def find_pax(
+        self,
+        clees: list[str | int | bool] | str | int | bool,
+        critere_clees: list[str] | str,
+    ) -> list[lib_pax.Pax]:
         return self.pax.find_pax(clees, critere_clees)

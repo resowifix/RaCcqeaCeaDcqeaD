@@ -14,10 +14,11 @@ class Bouffe:
 
 
 class Ensemble_bouffes:
-    bouffes: list[Bouffe] = []
+    bouffes: list[Bouffe]
     filename: str
 
     def __init__(self):
+        self.bouffes = []
         self.filename = "data/bouffes.csv"
 
     def import_from_database(self):

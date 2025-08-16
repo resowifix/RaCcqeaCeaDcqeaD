@@ -3,6 +3,6 @@
 rm -rf data
 mkdir data
 echo -e "id;nom;prenom;est_X;numero_tel;mail;solde" > data/pax.csv
-echo -e "date;montant" > data/bouffes.csv
+echo -e "id;date;montant" > data/bouffes.csv
 echo -e "id;nom;prenom" > data/presence.csv
 echo -e "nom;valeur\nid_pax;0\nid_bouffe;0" > data/dogmes.csv

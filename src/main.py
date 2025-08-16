@@ -4,7 +4,7 @@ import pax as p
 import os
 
 
-def main():
+def main() -> None:
     ccx = CCX()
     dogmes = Dogmes()
     stop = False
@@ -15,7 +15,7 @@ def main():
             stop = stop_app(ccx, dogmes)
 
 
-def ask_user(ccx, dogmes):
+def ask_user(ccx: CCX, dogmes: Dogmes) -> bool:
     print("Qu'est ce que tu me veux, wesh ??!!? ", end="")
     message = input()
     action, args = parse_message(message)
@@ -54,26 +54,28 @@ def ask_user(ccx, dogmes):
             return False
 
 
-def parse_message(message: str):
+def parse_message(message: str) -> tuple[str, list[str]]:
     parsed_message = message.split()
     return parsed_message[0], parsed_message[1:]
 
 
-def display_help():
+def display_help() -> None:
     print("T'es pas bien malin !")
 
 
-def add_pax(ccx, dogmes, args):
+def add_pax(ccx: CCX, dogmes: Dogmes, args: list[str]) -> None:
     nom, prenom, est_X, numero_tel, mail = ask_info_pax()
     if check_info_pax(nom, prenom, est_X, numero_tel, mail):
         create_new_pax(ccx, dogmes, nom, prenom, est_X != False, numero_tel, mail)
 
 
-def check_info_pax(nom, prenom, est_X, numero_tel, mail):
+def check_info_pax(
+    nom: str, prenom: str, est_X: bool, numero_tel: str, mail: str
+) -> bool:
     return True
 
 
-def ask_info_pax():
+def ask_info_pax() -> tuple[str, str, bool, str, str]:
     print("Nom ? ", end="")
     nom = input()
     print("Prenom ? ", end="")
@@ -87,7 +89,15 @@ def ask_info_pax():
     return nom, prenom, est_X, numero_tel, mail
 
 
-def create_new_pax(ccx, dogmes, nom, prenom, est_X, numero_tel, mail):
+def create_new_pax(
+    ccx: CCX,
+    dogmes: Dogmes,
+    nom: str,
+    prenom: str,
+    est_X: bool,
+    numero_tel: str,
+    mail: str,
+) -> None:
     id = int(dogmes.kt("id_pax"))
     dogmes.concile("id_pax", str(id + 1))
     ccx.add_pax(id, nom, prenom, est_X, numero_tel, mail)
@@ -112,20 +122,22 @@ def add_bouffe(ccx, dogmes, args):
     ccx.add_bouffe(date, montant, participants)
 
 
-def del_pax(ccx, args):
+def del_pax(ccx: CCX, args: list[str]) -> None:
     NotImplemented
 
 
-def del_bouffe(ccx, args):
+def del_bouffe(ccx: CCX, args: list[str]) -> None:
     NotImplemented
 
 
-def find_pax(ccx, args):
+def find_pax(ccx: CCX, args: list[str]) -> None:
     nom, prenom, est_X, numero_tel, mail = ask_info_pax()
     find_pax_with_info(ccx, nom, prenom, est_X, numero_tel, mail)
 
 
-def find_pax_with_info(ccx, nom, prenom, est_X, numero_tel, mail):
+def find_pax_with_info(
+    ccx: CCX, nom: str, prenom: str, est_X: bool, numero_tel: str, mail: str
+) -> None:
     print_find_results(
         ccx.find_pax(
             [nom, prenom, est_X, numero_tel, mail],
@@ -134,7 +146,7 @@ def find_pax_with_info(ccx, nom, prenom, est_X, numero_tel, mail):
     )
 
 
-def print_find_results(results):
+def print_find_results(results: list[p.Pax]) -> None:
     match len(results):
         case 0:
             print("On est dans le désert depuis 40 jours, y'a plus grand monde :(")
@@ -147,16 +159,16 @@ def print_find_results(results):
                 print(result)
 
 
-def find_bouffe(ccx, args):
+def find_bouffe(ccx: CCX, args: list[str]) -> None:
     NotImplemented
 
 
-def unknown_action():
+def unknown_action() -> None:
     print("Je parle pas le sanscrit !")
     print("h pour l'aide.")
 
 
-def reinitialize(ccx):
+def reinitialize(ccx: CCX) -> None:
     print("Attention, tout va péter !")
     print("Sûr (o/N) ?")
     if input() == "o":
@@ -164,12 +176,12 @@ def reinitialize(ccx):
         ccx.__init__()
 
 
-def save(ccx, dogmes):
+def save(ccx: CCX, dogmes: Dogmes) -> None:
     ccx.save()
     dogmes.save()
 
 
-def stop_app(ccx, dogmes):
+def stop_app(ccx: CCX, dogmes: Dogmes) -> bool:
     print("Sûr (O/n) ?")
     if input() == "n":
         return False
