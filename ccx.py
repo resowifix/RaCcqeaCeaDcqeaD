@@ -36,3 +36,5 @@ class CCX:
         converti = lib_pax.Pax(id, nom, prenom, est_X, numero_tel, mail)
         self.pax.add_pax(converti)
 
+    def find_pax(self, clees, critere_clees):
+        return self.pax.find_pax(clees, critere_clees)
