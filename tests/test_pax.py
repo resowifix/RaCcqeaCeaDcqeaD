@@ -10,13 +10,14 @@ paxVaneau = pax.Pax(1, "Vaneau", "Louis", True, "0612121212", "louis.vaneau@poly
 paxJudas = pax.Pax(2, "Le Radin", "Judas", False, "0000000000", "judas@iscariote@gmail.com")
 
 
-@pytest.mark.parametrize("paxObj, membreResult", [
-    (paxPierre, [paxPierre]),
-    (paxVaneau, [paxPierre, paxVaneau])
+@pytest.mark.parametrize("paxList, membreResult", [
+    ([paxPierre], [paxPierre]),
+    ([paxPierre, paxVaneau, paxJudas], [paxPierre, paxVaneau, paxJudas])
 ])
-def test_add_pax(paxObj: pax.Pax, membreResult: list[pax.Pax]) -> None:
+def test_add_pax(paxList: list[pax.Pax], membreResult: list[pax.Pax]) -> None:
     croyants = pax.Croyant()
-    croyants.add_pax(paxObj)
+    for p in paxList:
+        croyants.add_pax(p)
     assert croyants.membres == membreResult
 
 
@@ -45,4 +46,4 @@ def test_save(saveFile: str) -> None:
     content = file.readlines()
     assert content == saveFile
     file.close()
-    os.remove(file)
+    os.system(f"rm {croyants.filename}")
