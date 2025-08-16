@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm -rf data
+mkdir data
+echo -e "id;nom;prenom;est_X;numero_tel;mail;solde" > data/pax.csv
+echo -e "0;titi;toto;0;0654545454;toto@gmail.com;0" >> data/pax.csv
+echo -e "1;tutu;turlutu;1;0687878787;turlutu.tutu@polytechnique.edu;0" >> data/pax.csv
+echo -e "id;date;montant" > data/bouffes.csv
+echo -e "0;20250404;10" >> data/bouffes.csv
+echo -e "nom;valeur\nid_pax;2\nid_bouffe;1" > data/dogmes.csv
