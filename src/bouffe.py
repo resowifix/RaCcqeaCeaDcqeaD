@@ -1,10 +1,14 @@
 class Bouffe:
+    id: int
     date: str
     montant: int
+    participants: list[int]
 
-    def __init__(self, id, date, montant):
+    def __init__(self, id: int, date: str, montant: int, participants: list[int]) -> None:
+        self.id = id
         self.date = date
         self.montant = montant
+        self.participants = participants
 
     def __eq__(self, o):
         return isinstance(o, Bouffe) and self.date == o.date
@@ -28,7 +32,7 @@ class Ensemble_bouffes:
             self.bouffes.append(parse_bouffe(ligne))
         file_bouffes.close()
 
-    def add_new_bouffe(self, bouffe):
+    def add_bouffe(self, bouffe):
         self.bouffes.append(bouffe)
 
     def delete_bouffe(self, vieille_bouffe) -> int:
@@ -40,6 +44,7 @@ class Ensemble_bouffes:
 
     def save(self):
         file_bouffes = open(self.filename, "w")
+        file_bouffes.write("date;montant;participants\n")
         for bouffe in self.bouffes:
             file_bouffes.write(file_line_of_bouffe(bouffe))
         file_bouffes.close()
@@ -67,4 +72,4 @@ def parse_bouffe(ligne: str) -> Bouffe:
 
 
 def file_line_of_bouffe(bouffe: Bouffe) -> str:
-    return bouffe.date + ";" + str(bouffe.montant) + "\n"
+    return bouffe.date + ";" + str(bouffe.montant) + ";" + str(bouffe.participants) + "\n"

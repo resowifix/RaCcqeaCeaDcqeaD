@@ -31,8 +31,9 @@ class CCX:
         self.pax.save()
         self.bouffes.save()
 
-    def add_bouffe(self, date, montant, participants):
-        NotImplemented
+    def add_bouffe(self, id: int, date: str, montant: int, participants: list[int]) -> None:
+        cene = lib_bouffe.Bouffe(id, date, montant, participants)
+        self.bouffes.add_bouffe(cene)
 
     def add_pax(
         self, id: int, nom: str, prenom: str, est_X: bool, numero_tel: str, mail: str
