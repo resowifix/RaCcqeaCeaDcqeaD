@@ -55,7 +55,6 @@ class Croyant:
     def add_pax(self, pax: Pax) -> None:
         self.membres.append(pax)
 
-        
     def delete_pax(self, heretique):
         for i in range(len(self.membres)):
             if heretique == self.membres[i]:
@@ -204,7 +203,7 @@ def file_line_of_pax(pax: Pax) -> str:
         + ";"
         + pax.prenom
         + ";"
-        + sring_of_bool_est_X(pax.est_X)
+        + string_of_bool_est_X(pax.est_X)
         + ";"
         + pax.numero_tel
         + ";"
@@ -215,7 +214,7 @@ def file_line_of_pax(pax: Pax) -> str:
     )
 
 
-def sring_of_bool_est_X(est_X: bool) -> str:
+def string_of_bool_est_X(est_X: bool) -> str:
     if est_X:
         return "1"
     return "0"
