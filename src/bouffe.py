@@ -11,7 +11,7 @@ class Bouffe:
         self.participants = participants
 
     def __eq__(self, o):
-        return isinstance(o, Bouffe) and self.date == o.date
+        return isinstance(o, Bouffe) and self.id == o.id
 
     def __lt__(self, o):
         return self.date < o.date
@@ -36,7 +36,7 @@ class Ensemble_bouffes:
         self.bouffes.append(bouffe)
 
     def delete_bouffe(self, vieille_bouffe) -> int:
-        for i in range(self.bouffes):
+        for i in range(len(self.bouffes)):
             if vieille_bouffe == self.bouffes[i]:
                 self.bouffes.pop(i)
                 return 0
@@ -44,7 +44,7 @@ class Ensemble_bouffes:
 
     def save(self):
         file_bouffes = open(self.filename, "w")
-        file_bouffes.write("date;montant;participants\n")
+        file_bouffes.write("id;date;montant;participants\n")
         for bouffe in self.bouffes:
             file_bouffes.write(file_line_of_bouffe(bouffe))
         file_bouffes.close()
@@ -65,11 +65,20 @@ class Ensemble_bouffes:
 
 
 def parse_bouffe(ligne: str) -> Bouffe:
+    ligne = ligne[:-1]
     t = ligne.split(";")
-    print(t)
-    date, montant = t
-    return Bouffe(date, int(montant))
+    id, date, montant, participants = t
+    return Bouffe(int(id), date, int(montant), str_to_list(participants))
+
+
+def str_to_list(chaine: str) -> list[int]:
+    if chaine == "[]":
+        return []
+    chaine = chaine[1:-1]
+    print(chaine)
+    print(chaine.split(","))
+    return [int(i) for i in chaine.split(",")]
 
 
 def file_line_of_bouffe(bouffe: Bouffe) -> str:
-    return bouffe.date + ";" + str(bouffe.montant) + ";" + str(bouffe.participants) + "\n"
+    return str(bouffe.id) + ";" + bouffe.date + ";" + str(bouffe.montant) + ";" + str(bouffe.participants) + "\n"
